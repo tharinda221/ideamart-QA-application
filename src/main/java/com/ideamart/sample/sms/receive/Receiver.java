@@ -17,11 +17,9 @@ package com.ideamart.sample.sms.receive;
 
 import com.ideamart.sample.sms.operations.Operations;
 import com.ideamart.sample.usermgt.UserDAO;
-import hms.kite.samples.api.SdpException;
 import hms.kite.samples.api.sms.MoSmsListener;
 import hms.kite.samples.api.sms.messages.MoSmsReq;
 
-import java.net.MalformedURLException;
 import java.sql.SQLException;
 
 /**
@@ -41,8 +39,8 @@ public class Receiver implements MoSmsListener {
         Operations operations = new Operations();
         try {
             String operation = messageParts[1].toLowerCase();
-            if(operation.equals("un")) {
-                operations.register(messageParts[2], moSmsReq.getSourceAddress());
+            if(operation.equals("ans")) {
+                operations.getAnswer(messageParts[2], moSmsReq.getSourceAddress());
             } else if(operation.equals("chat")) {
                 userDAO.updateCount(moSmsReq.getSourceAddress());
                 String finalString = "";
@@ -50,8 +48,6 @@ public class Receiver implements MoSmsListener {
                     finalString = finalString+messageParts[i]+" ";
                 }
                 operations.chat(messageParts[2], finalString, moSmsReq.getSourceAddress());
-            } else if(operation.equals("find")) {
-                operations.find(moSmsReq.getSourceAddress());
             } else {
                 operations.sendErrorMessage(moSmsReq.getSourceAddress());
             }

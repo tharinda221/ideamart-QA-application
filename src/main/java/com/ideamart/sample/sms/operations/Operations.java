@@ -30,70 +30,12 @@ import com.ideamart.sample.common.Constants;
  */
 public class Operations {
 
-//    public void passToDatabase(MoSmsReq moSmsReq) throws SQLException, ClassNotFoundException, SdpException {
-//        UserDAO userDAO = new UserDAO();
-//        User user = new User(moSmsReq.getSourceAddress(), null, "1", moSmsReq.getMessage(), "no");
-//        userDAO.AddUser(user);
-//        System.out.println(userDAO.userAvailability(moSmsReq.getSourceAddress()));
-//        SendMessage sendMessage = new SendMessage();
-//        sendMessage.SendMessage("Your Message Received",moSmsReq.getApplicationId(),moSmsReq.getSourceAddress()
-//                , Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-//    }
+    public void chat(String name, String message, String userAddress) {
 
-    public void chat(String name, String message, String userAddress) throws ClassNotFoundException, SQLException {
-        UserDAO userDAO = new UserDAO();
-        userDAO.updateCount(userAddress);
-        String userName = userDAO.getUserNameByAddress(userAddress);
-        if (userName.equals("null")) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.SendMessage(Constants.MessageConstants.HELP_SMS, Constants.ApplicationConstants.APP_ID,
-                    userAddress, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-            return;
-        }
-        String address = userDAO.getUserAddressByName(name);
-        SendMessage sendMessage = new SendMessage();
-        if(address == null) {
-            sendMessage.SendMessage("The name you entered was wrong. Try again", Constants.ApplicationConstants.APP_ID,
-                    userAddress, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-        } else {
-            String finalMessage = userName + ":" + message;
-            sendMessage.SendMessage(finalMessage, Constants.ApplicationConstants.APP_ID,
-                    address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-        }
     }
 
-    public void register(String name, String address) throws ClassNotFoundException, SQLException {
-        UserDAO userDAO = new UserDAO();
-        if(!userDAO.userAvailability(address)) {
-            User user = new User(address, null, "1", "sms", 1, 0);
-            userDAO.AddUser(user);
-        }
-        SendMessage sendMessage = new SendMessage();
-        if(userDAO.RegisterUserName(address, name)) {
-            String finalMesage = "You have successfully registered.\n Your use name is " + name;
-            sendMessage.SendMessage(finalMesage, Constants.ApplicationConstants.APP_ID,
-                    address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-        } else {
-            sendMessage.SendMessage("The name you entered is already exist. Please enter another one.", Constants.ApplicationConstants.APP_ID,
-                    address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-        }
-    }
+    public void getAnswer(String name, String address) {
 
-    public void find(String address) throws ClassNotFoundException, SQLException {
-        UserDAO userDAO = new UserDAO();
-        userDAO.updateCount(address);
-        String name = userDAO.getUserNameByAddress(address);
-        if(name.equals("null")) {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.SendMessage(Constants.MessageConstants.HELP_SMS, Constants.ApplicationConstants.APP_ID,
-                    address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-            return;
-        } else {
-            SendMessage sendMessage = new SendMessage();
-            sendMessage.SendMessage(name +":wisin echat magein chat kirimata illum kara atha.", Constants.ApplicationConstants.APP_ID,
-                    "tel:all", Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
-            return;
-        }
     }
 
     public void sendErrorMessage(String address) {
