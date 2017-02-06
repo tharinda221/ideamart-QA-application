@@ -15,6 +15,10 @@
  */
 package com.ideamart.sample.sms.operations;
 
+import com.ideamart.sample.questionMgt.Answers;
+import com.ideamart.sample.questionMgt.Question;
+import com.ideamart.sample.questionMgt.QuestionDAO;
+import com.ideamart.sample.questionMgt.SMS;
 import com.ideamart.sample.sms.send.SendMessage;
 import com.ideamart.sample.usermgt.User;
 import com.ideamart.sample.usermgt.UserDAO;
@@ -22,6 +26,9 @@ import hms.kite.samples.api.SdpException;
 import hms.kite.samples.api.sms.messages.MoSmsReq;
 
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.ideamart.sample.common.Constants;
 
@@ -30,12 +37,80 @@ import com.ideamart.sample.common.Constants;
  */
 public class Operations {
 
-    public void chat(String name, String message, String userAddress) {
+    public void sendQuestionToUsers(Question question) {
+        String msg = question.getQuestion() + "\n" + "1. " + question.getAns1() + "\n" +
+                "2. " + question.getAns2() + "\n" + "3. " + question.getAns3() + "\n" + "4. " + question.getAns4() + "\n" +
+                Constants.MessageConstants.SMS_ANSWER_GUID;
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.SendMessage(msg, Constants.ApplicationConstants.APP_ID,
+                "tel:all", Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
+    }
+
+    public void chat(String message, String address) throws SQLException, ClassNotFoundException {
+        QuestionDAO questionDAO = new QuestionDAO();
+        if(questionDAO.smsAvailability(address)) {
+            questionDAO.updateResponse(address, message);
+        } else {
+            SMS sms = new SMS();
+            sms.setAddress(address);
+            sms.setResponse(message);
+            sms.setMesssage("");
+            questionDAO.registerSMS(sms);
+        }
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.SendMessage(Constants.MessageConstants.MESSAGE_RESPONSE, Constants.ApplicationConstants.APP_ID,
+                address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
 
     }
 
-    public void getAnswer(String name, String address) {
+    public void getAnswer(String answer, String address) {
+        QuestionDAO questionDAO = new QuestionDAO();
+        Question question;
 
+        try {
+            int lastIndex = questionDAO.getLastQuestionIndex();
+            question = questionDAO.getQuestionByID(lastIndex);
+            String correctAnswer = question.getCorrectAnswer();
+            if(correctAnswer.equals(answer)) {
+                if(!questionDAO.AnswerAvailable(address, lastIndex)) {
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yy HH:mm:ss");
+                    Date dateobj = new Date();
+                    String now = dateFormat.format(dateobj);
+                    questionDAO.RegisterAnswer(address, lastIndex, now, 0);
+                } else {
+                    questionDAO.updateAnswerCount(address, lastIndex);
+                }
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.SendMessage(Constants.MessageConstants.CORRECT_ANSWER_RESPONSE, Constants.ApplicationConstants.APP_ID,
+                        address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
+
+            } else {
+                SendMessage sendMessage = new SendMessage();
+                sendMessage.SendMessage(Constants.MessageConstants.WRONG_ANSWER_RESPONSE, Constants.ApplicationConstants.APP_ID,
+                        address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendSMSToUser(String sms, String address) throws SQLException, ClassNotFoundException {
+        QuestionDAO questionDAO = new QuestionDAO();
+        if(questionDAO.smsAvailability(address)) {
+            questionDAO.updateMessage(address, sms);
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.SendMessage(sms, Constants.ApplicationConstants.APP_ID,
+                    address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
+        } else {
+            SMS smsObj = new SMS();
+            smsObj.setAddress(address);
+            smsObj.setMesssage(sms);
+            smsObj.setResponse("");
+            questionDAO.registerSMS(smsObj);
+            SendMessage sendMessage = new SendMessage();
+            sendMessage.SendMessage(sms, Constants.ApplicationConstants.APP_ID,
+                    address, Constants.ApplicationConstants.PASSWORD, Constants.ApplicationConstants.SMS_URL);
+        }
     }
 
     public void sendErrorMessage(String address) {

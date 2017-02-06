@@ -1,0 +1,106 @@
+<!DOCTYPE web-app PUBLIC
+ "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+ "http://java.sun.com/dtd/web-app_2_3.dtd" >
+
+<web-app>
+  <display-name>Archetype Created Web Application</display-name>
+  
+      <servlet>
+        <servlet-name>ussdReceiver</servlet-name>
+        <servlet-class>hms.kite.samples.api.ussd.MoUssdReceiver</servlet-class>
+        <init-param>
+            <param-name>ussdReceiver</param-name>
+            <param-value>com.ideamart.sample.ussd.receiver.Receiver</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>ussdReceiver</servlet-name>
+        <url-pattern>/ussdReceiver</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>smsReceiver</servlet-name>
+        <servlet-class>hms.kite.samples.api.sms.MoSmsReceiver</servlet-class>
+        <init-param>
+            <param-name>smsReceiver</param-name>
+            <param-value>com.ideamart.sample.sms.receive.Receiver</param-value>
+        </init-param>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>smsReceiver</servlet-name>
+        <url-pattern>/smsReceiver</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Notification</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.Notification</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>Notification</servlet-name>
+        <url-pattern>/subsNotify</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>dashboard</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.dashboard</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>dashboard</servlet-name>
+        <url-pattern>/dashboard</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>addQuestion</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.addQuestion</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>addQuestion</servlet-name>
+        <url-pattern>/addQuestion</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>viewSubmissions</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.viewSubmissions</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>viewSubmissions</servlet-name>
+        <url-pattern>/viewSubmissions</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>viewAllQuestions</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.viewAllQuestions</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>viewAllQuestions</servlet-name>
+        <url-pattern>/viewAllQuestions</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>sendSms</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.sendSms</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>sendSms</servlet-name>
+        <url-pattern>/sendSms</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>viewAllSms</servlet-name>
+        <servlet-class>com.ideamart.sample.restservices.viewAllSms</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>viewAllSms</servlet-name>
+        <url-pattern>/viewAllSms</url-pattern>
+    </servlet-mapping>
+
+</web-app>

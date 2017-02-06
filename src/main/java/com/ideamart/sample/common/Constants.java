@@ -49,8 +49,9 @@ public final class Constants {
 //        public static final String DATABASE_PASSWORD = "";
 
         public static final String DATABASE_TRAFFIC_TABLE_NAME = "qa";
-        public static final String DATABASE_USER_TABLE_NAME = "eechat_usernames";
-
+//        public static final String DATABASE_USER_TABLE_NAME = "eechat_usernames";
+        public static final String DATABASE_QUESTION_TABLE_NAME = "question";
+        public static final String DATABASE_ANSWER_TABLE_NAME = "answer";
         public static final String DATABASE_DASHBOARD_TABLE_NAME = "qa_dashboard";
 
 
@@ -68,6 +69,10 @@ public final class Constants {
                 "            sent to 77100\n" +
                 "              Ex:- \"eechat chat udaya hello mchn khomada.. -- sent to 77100\n";
 
-
+        public static final String SMS_ANSWER_GUID = "Enter your answer as follows.\n <appname> <space> ans <space> <your number>" +
+                "- 77100\n ex - dm ans 4";
+        public static final String CORRECT_ANSWER_RESPONSE = "Your answer is correct. Thanks for the submission.";
+        public static final String WRONG_ANSWER_RESPONSE = "Your answer is incorrect. Please try again.";
+        public static final String MESSAGE_RESPONSE = "Thanks for your message. We'll reply you soon";
     }
 }

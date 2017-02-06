@@ -14,7 +14,6 @@ import java.sql.*;
 public class UserDAO {
 
     private String tableName = Constants.ApplicationConstants.DATABASE_TRAFFIC_TABLE_NAME;
-    private String tableUserName = Constants.ApplicationConstants.DATABASE_USER_TABLE_NAME;
 
     private Connection connection;
     private Statement stmt;
@@ -101,85 +100,6 @@ public class UserDAO {
         }
         return false;
 
-    }
-
-    public boolean RegisterUserName(String address, String name) throws ClassNotFoundException {
-
-        try {
-            connection = DatabaseConnection.getDBInstance().getConnection();
-            stmt = connection.createStatement();
-            String sql = "INSERT INTO " + tableUserName + " VALUES (" + "\"" + address + "\"" + "," + "\"" + name + "\"" + ");";
-            System.out.println(sql);
-            stmt.executeUpdate(sql);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        } finally {
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-        }
-    }
-
-    public String getUserAddressByName(String name) throws ClassNotFoundException {
-        ResultSet resultSet = null;
-        try {
-            connection = DatabaseConnection.getDBInstance().getConnection();
-            stmt = connection.createStatement();
-            String query = "Select * from " + tableUserName + " where name= " + "\"" + name + "\"" + ";";
-            System.out.println(query);
-            resultSet = stmt.executeQuery(query);
-            while (resultSet.next()) {
-                return resultSet.getString("address");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-        }
-        return null;
-    }
-
-    public String getUserNameByAddress(String address) throws ClassNotFoundException {
-        ResultSet resultSet = null;
-        try {
-            connection = DatabaseConnection.getDBInstance().getConnection();
-            stmt = connection.createStatement();
-            String query = "Select * from " + tableUserName + " where address= " + "\"" + address + "\"" + ";";
-            System.out.println(query);
-            resultSet = stmt.executeQuery(query);
-            while (resultSet.next()) {
-                return resultSet.getString("name");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return "null";
-        } finally {
-            if (resultSet != null) {
-                try {
-                    resultSet.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-            if (connection != null) {
-                try {
-                    connection.close();
-                } catch (SQLException e) { /* ignored */}
-            }
-        }
-        return "null";
     }
 
     public void updateUserStatus(String address, int status) throws ClassNotFoundException, SQLException {

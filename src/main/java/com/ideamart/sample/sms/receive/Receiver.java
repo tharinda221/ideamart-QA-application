@@ -16,6 +16,7 @@
 package com.ideamart.sample.sms.receive;
 
 import com.ideamart.sample.sms.operations.Operations;
+import com.ideamart.sample.usermgt.User;
 import com.ideamart.sample.usermgt.UserDAO;
 import hms.kite.samples.api.sms.MoSmsListener;
 import hms.kite.samples.api.sms.messages.MoSmsReq;
@@ -40,14 +41,19 @@ public class Receiver implements MoSmsListener {
         try {
             String operation = messageParts[1].toLowerCase();
             if(operation.equals("ans")) {
+                if(!userDAO.userAvailability(moSmsReq.getSourceAddress())) {
+                    User user = new User(moSmsReq.getSourceAddress(), null, "1", "", 1, 2);
+                    userDAO.AddUser(user);
+                } else {
+                    userDAO.updateCount(moSmsReq.getSourceAddress());
+                }
                 operations.getAnswer(messageParts[2], moSmsReq.getSourceAddress());
             } else if(operation.equals("chat")) {
-                userDAO.updateCount(moSmsReq.getSourceAddress());
                 String finalString = "";
-                for (int i =3; i< messageParts.length; i++) {
+                for (int i =2; i< messageParts.length; i++) {
                     finalString = finalString+messageParts[i]+" ";
                 }
-                operations.chat(messageParts[2], finalString, moSmsReq.getSourceAddress());
+                operations.chat(finalString, moSmsReq.getSourceAddress());
             } else {
                 operations.sendErrorMessage(moSmsReq.getSourceAddress());
             }
